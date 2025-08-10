@@ -36,6 +36,17 @@ All colors MUST be HSL.
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
 
+    /* Brand & gradients */
+    --brand: 258 89% 60%; /* Indigo */
+    --brand-2: 286 75% 55%; /* Purple */
+    --brand-strong: 258 89% 50%;
+    --brand-foreground: 0 0% 100%;
+    --gradient-hero: linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-2)));
+
+    /* Shadows & motion */
+    --shadow-elegant: 0 12px 30px -10px hsl(var(--brand) / 0.35);
+    --transition-smooth: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
@@ -83,6 +94,13 @@ All colors MUST be HSL.
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+    --brand: 258 89% 60%;
+    --brand-2: 286 75% 55%;
+    --brand-strong: 258 89% 55%;
+    --brand-foreground: 0 0% 100%;
+    --gradient-hero: linear-gradient(135deg, hsl(var(--brand-2)), hsl(var(--brand)));
+    --shadow-elegant: 0 12px 30px -10px hsl(var(--brand) / 0.4);
+    --transition-smooth: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
