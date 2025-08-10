@@ -4,31 +4,31 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 
 const subjects = [
-  { title: "Mathematics", slug: "mathematics", ready: true },
-  { title: "Science", slug: "science", ready: false },
-  { title: "English", slug: "english", ready: false },
-  { title: "History", slug: "history", ready: false },
-  { title: "Geography", slug: "geography", ready: false },
-  { title: "Computer Science", slug: "computer-science", ready: false },
-  { title: "Art", slug: "art", ready: false },
-  { title: "Music", slug: "music", ready: false },
+  { title: "Research", slug: "research", ready: true },
+  { title: "General Mathematics", slug: "general-mathematics", ready: false },
+  { title: "Earth and Life Science", slug: "earth-and-life-science", ready: false },
+  { title: "Physical Science", slug: "physical-science", ready: false },
+  { title: "21st Century Literature", slug: "21st-century-literature", ready: false },
+  { title: "Oral Communication", slug: "oral-communication", ready: false },
+  { title: "Reading and Writing Skills", slug: "reading-and-writing-skills", ready: false },
+  { title: "Media and Information Literacy", slug: "media-and-information-literacy", ready: false },
 ];
 
 export default function Index() {
   return (
     <main className="min-h-screen bg-background">
       <SEO
-        title="Subject Reviewer | 8 Subjects MCQ"
-        description="Choose from 8 subjects to practice multiple-choice reviewers. Start with Mathematics."
+        title="SHS Subject Reviewer | Research MCQ"
+        description="Choose from 8 SHS subjects. Start the Research multiple-choice reviewer now."
         canonicalPath="/"
       />
       <header className="w-full bg-gradient-to-r from-[hsl(var(--brand))] to-[hsl(var(--brand-2))]">
         <div className="container py-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-[hsl(var(--brand-foreground))]">Student Subject Reviewer</h1>
-          <p className="mt-3 text-[hsl(var(--brand-foreground))]/80 max-w-2xl">Practice multiple-choice tests to prepare and track your progress. Mathematics is available now; more subjects coming soon.</p>
+          <h1 className="text-4xl md:text-5xl font-bold text-[hsl(var(--brand-foreground))]">SHS Subject Reviewer</h1>
+          <p className="mt-3 text-[hsl(var(--brand-foreground))]/80 max-w-2xl">Practice multiple-choice tests to prepare and track your progress. Research is available now; more SHS subjects coming soon.</p>
           <div className="mt-6">
             <Button asChild variant="hero" size="lg">
-              <Link to="/subject/mathematics">Start Mathematics</Link>
+              <Link to="/subject/research">Start Research</Link>
             </Button>
           </div>
         </div>
