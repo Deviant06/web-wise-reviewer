@@ -7,7 +7,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-
+import { Input } from "@/components/ui/input";
+import QRCode from "react-qr-code";
 interface Question {
   id: string;
   prompt: string;
@@ -141,6 +142,9 @@ function Quiz({ title, questions, onFinish }: { title: string; questions: Questi
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<(number | null)[]>(Array(questions.length).fill(null));
   const [submitted, setSubmitted] = useState(false);
+  const [student, setStudent] = useState<{ name: string; section: string } | null>(null);
+  const [nameInput, setNameInput] = useState("");
+  const [sectionInput, setSectionInput] = useState("");
 
   const total = questions.length;
   const progress = Math.round(((answers.filter(a => a !== null).length) / total) * 100);
@@ -161,9 +165,52 @@ function Quiz({ title, questions, onFinish }: { title: string; questions: Questi
     onFinish?.(score, total);
   };
 
+  // Require student info before starting the quiz
+  if (!student) {
+    return (
+      <main className="min-h-screen bg-background">
+        <SEO title={`${title} | Start`} description={`Enter your details to begin ${title}.`} canonicalPath={window.location.pathname} />
+        <section className="container py-10">
+          <Card className="max-w-xl mx-auto">
+            <CardHeader>
+              <CardTitle>Student Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="student-name">Full Name</Label>
+                <Input id="student-name" placeholder="e.g., Juan Dela Cruz" value={nameInput} onChange={(e) => setNameInput(e.target.value)} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="student-section">Section</Label>
+                <Input id="student-section" placeholder="e.g., 12 - STEM A" value={sectionInput} onChange={(e) => setSectionInput(e.target.value)} />
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-end">
+              <Button
+                variant="hero"
+                onClick={() => setStudent({ name: nameInput.trim(), section: sectionInput.trim() })}
+                disabled={!nameInput.trim() || !sectionInput.trim()}
+              >
+                Start Quiz
+              </Button>
+            </CardFooter>
+          </Card>
+        </section>
+      </main>
+    );
+  }
+
+  // Results with QR verification
   if (submitted) {
     const score = answers.reduce((acc, ans, i) => acc + (ans === questions[i].answerIndex ? 1 : 0), 0);
     const percent = Math.round((score / total) * 100);
+    const verifyUrl = new URL("/verify", window.location.origin);
+    verifyUrl.searchParams.set("name", student.name);
+    verifyUrl.searchParams.set("section", student.section);
+    verifyUrl.searchParams.set("subject", title);
+    verifyUrl.searchParams.set("score", String(score));
+    verifyUrl.searchParams.set("total", String(total));
+
     return (
       <main className="min-h-screen bg-background">
         <SEO title={`${title} | Results`} description={`Your results for ${title}.`} canonicalPath={window.location.pathname} />
@@ -173,9 +220,26 @@ function Quiz({ title, questions, onFinish }: { title: string; questions: Questi
               <CardTitle>Results</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Student</span>
+                  <span className="font-medium text-foreground">{student.name}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Section</span>
+                  <span className="font-medium text-foreground">{student.section}</span>
+                </div>
+              </div>
               <p className="text-muted-foreground">You scored <span className="font-semibold text-foreground">{score}</span> out of {total}.</p>
               <Progress value={percent} />
               <p className="text-sm">Percentage: <span className="font-medium">{percent}%</span></p>
+
+              <div className="mt-6">
+                <p className="mb-2 text-sm text-muted-foreground">Scan to verify:</p>
+                <div className="flex items-center justify-center rounded-md border border-border bg-card p-4">
+                  <QRCode value={verifyUrl.toString()} size={160} />
+                </div>
+              </div>
             </CardContent>
             <CardFooter className="flex gap-3">
               <Button variant="secondary" onClick={() => { setAnswers(Array(total).fill(null)); setCurrent(0); setSubmitted(false); }}>Retake</Button>
