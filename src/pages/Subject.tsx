@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import QRCode from "react-qr-code";
 interface Question {
   id: string;
@@ -182,7 +183,19 @@ function Quiz({ title, questions, onFinish }: { title: string; questions: Questi
               </div>
               <div className="space-y-2">
                 <Label htmlFor="student-section">Section</Label>
-                <Input id="student-section" placeholder="e.g., 12 - STEM A" value={sectionInput} onChange={(e) => setSectionInput(e.target.value)} />
+                <Select value={sectionInput} onValueChange={setSectionInput}>
+                  <SelectTrigger id="student-section">
+                    <SelectValue placeholder="Choose your section" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="COPPER">COPPER</SelectItem>
+                    <SelectItem value="MERCURY">MERCURY</SelectItem>
+                    <SelectItem value="GOLD">GOLD</SelectItem>
+                    <SelectItem value="HELIUM">HELIUM</SelectItem>
+                    <SelectItem value="NICKOL">NICKOL</SelectItem>
+                    <SelectItem value="TITANIUM">TITANIUM</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </CardContent>
             <CardFooter className="flex justify-end">
