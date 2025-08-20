@@ -10,6 +10,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import QRCode from "react-qr-code";
+import { supabase } from "@/integrations/supabase/client";
 interface Question {
   id: string;
   prompt: string;
@@ -160,8 +161,30 @@ function Quiz({ title, questions, onFinish }: { title: string; questions: Questi
   const canNext = answers[current] !== null;
   const canSubmit = answers.every(a => a !== null);
 
-  const submit = () => {
+  const submit = async () => {
     const score = answers.reduce((acc, ans, i) => acc + (ans === questions[i].answerIndex ? 1 : 0), 0);
+    const percent = Math.round((score / total) * 100);
+    
+    // Save to Supabase
+    try {
+      const { error } = await supabase
+        .from('quiz_results')
+        .insert({
+          student_name: student.name,
+          section: student.section,
+          subject: title.replace(' Reviewer', ''), // Remove "Reviewer" suffix
+          score,
+          total_questions: total,
+          percentage: percent
+        });
+      
+      if (error) {
+        console.error('Error saving quiz result:', error);
+      }
+    } catch (error) {
+      console.error('Error saving quiz result:', error);
+    }
+    
     setSubmitted(true);
     onFinish?.(score, total);
   };
